@@ -85,9 +85,9 @@
                                                             <constraint firstAttribute="width" constant="173" id="Hxy-kp-ivg"/>
                                                         </constraints>
                                                         <segments>
-                                                            <segment title="15%"/>
-                                                            <segment title="18%"/>
                                                             <segment title="20%"/>
+                                                            <segment title="23%"/>
+                                                            <segment title="25%"/>
                                                         </segments>
                                                         <color key="tintColor" name="tcHotPink"/>
                                                         <connections>

@@ -49,12 +49,12 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func tipPercentChanged(_ sender: Any) {
-        
+    @IBAction func tipPercentChanged(_ sender: UISegmentedControl) {
+        calculate()
     }
     
     @IBAction func resetButtonTapped(_ sender: Any) {
-        print("reset button tapped")
+        clear()
     }
     
     func calculate() {
@@ -65,12 +65,24 @@ class ViewController: UIViewController {
         
         guard let billAmountText = self.billAmountTextField.text,
             let billAmount = Double(billAmountText) else {
+                clear()
                 return
         }
         
         let roundedBillAmount = (100 * billAmount).rounded() / 100
         
-        let tipPercent = 0.15
+        let tipPercent: Double
+        switch tipPercentSegmentedControl.selectedSegmentIndex {
+        case 0:
+            tipPercent = 0.20
+        case 1:
+            tipPercent = 0.23
+        case 2:
+            tipPercent = 0.25
+        default:
+            preconditionFailure("Unexpected index.")
+        }
+        
         let tipAmount = roundedBillAmount * tipPercent
         let roundedTipAmount = (100 * tipAmount).rounded() / 100
         
@@ -80,6 +92,16 @@ class ViewController: UIViewController {
         self.billAmountTextField.text = String(format: "%.2f", roundedBillAmount)
         self.tipAmountLabel.text = String(format: "%.2f", roundedTipAmount)
         self.totalAmountLabel.text = String(format: "%.2f", totalAmount)
+    }
+    
+    func clear() {
+        self.billAmountTextField.text = nil
+        self.tipAmountLabel.text = "$0.00"
+        self.totalAmountLabel.text = "$0.00"
+        
+        tipPercentSegmentedControl.selectedSegmentIndex = 0
+        
+        
     }
     
     

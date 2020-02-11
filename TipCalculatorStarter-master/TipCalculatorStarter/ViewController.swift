@@ -108,18 +108,6 @@ class ViewController: UIViewController {
     }
     
     func setUpViews() {
-        // iOS 13+ doesn't allow tint color to be changed in attributes inspector
-        // Must set selected segment background color programatically
-        if #available(iOS 13.0, *) {
-            tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcHotPink
-        } else {
-            // Fallback on earlier versions
-        }
-        
-        tipPercentSegmentedControl.layer.borderWidth = 1
-        tipPercentSegmentedControl.layer.borderColor = UIColor.tcHotPink.cgColor
-        tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcDarkBlue], for: .selected)
-        tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcHotPink], for: .normal)
         
         headerView.layer.shadowOffset = CGSize(width: 0, height: 1)
         headerView.layer.shadowOpacity = 0.05
@@ -147,32 +135,14 @@ class ViewController: UIViewController {
         titleLabel.textColor = theme.primaryTextColor
 
         inputCardView.backgroundColor = theme.secondaryColor
+        // set segmented control styling
+        segmentedControlStyling(isDark)
 
         billAmountTextField.tintColor = theme.accentColor
         tipPercentSegmentedControl.tintColor = theme.accentColor
 
         outputCardView.backgroundColor = theme.primaryColor
         outputCardView.layer.borderColor = theme.accentColor.cgColor
-        
-        tipPercentSegmentedControl.layer.borderColor = theme.accentColor.cgColor
-        
-        if isDark {
-            if #available(iOS 13.0, *) {
-                tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcSeafoamGreen
-            } else {
-                // Fallback on earlier versions
-            }
-            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcBlueBlack], for: .selected)
-            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcSeafoamGreen], for: .normal)
-        } else {
-            if #available(iOS 13.0, *) {
-                tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcHotPink
-            } else {
-                // Fallback on earlier versions
-            }
-            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcDarkBlue], for: .selected)
-            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcHotPink], for: .normal)
-        }
 
         tipAmountTitleLabel.textColor = theme.primaryTextColor
         totalAmountTitleLabel.textColor = theme.primaryTextColor
@@ -184,6 +154,30 @@ class ViewController: UIViewController {
         
         isDefaultStatusBar = theme.isDefaultStatusBar
         setNeedsStatusBarAppearanceUpdate()
+    }
+    
+    func segmentedControlStyling(_ isDark: Bool) {
+        // If theme is dark, set corresponding color values
+        if isDark {
+            if #available(iOS 13.0, *) {
+                tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcSeafoamGreen
+            } else {
+                // Fallback on earlier versions
+            }
+            tipPercentSegmentedControl.layer.borderColor = UIColor.tcSeafoamGreen.cgColor
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcBlueBlack], for: .selected)
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcSeafoamGreen], for: .normal)
+        } else { // If theme is light, set corresponding color values
+            if #available(iOS 13.0, *) {
+                tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcHotPink
+            } else {
+                // Fallback on earlier versions
+            }
+            tipPercentSegmentedControl.layer.borderColor = UIColor.tcHotPink.cgColor
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcDarkBlue], for: .selected)
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcHotPink], for: .normal)
+        }
+        tipPercentSegmentedControl.layer.borderWidth = 1
     }
     
 }

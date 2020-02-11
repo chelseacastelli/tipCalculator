@@ -11,6 +11,12 @@ import UIKit
 class ViewController: UIViewController {
     
     // MARK: - Properties
+    
+    var isDefaultStatusBar = true
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return isDefaultStatusBar ? .default : .lightContent
+    }
 
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -35,6 +41,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         setUpViews()
+        setTheme(isDark: false)
         
         billAmountTextField.calculateButtonAction = {
             self.calculate()
@@ -44,11 +51,7 @@ class ViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func themeToggled(_ sender: UISwitch) {
-        if sender.isOn {
-            print("switch toggled on")
-        } else {
-            print("switch toggled off")
-        }
+        setTheme(isDark: sender.isOn)
     }
     
     @IBAction func tipPercentChanged(_ sender: UISegmentedControl) {
@@ -105,7 +108,6 @@ class ViewController: UIViewController {
     }
     
     func setUpViews() {
-        
         // iOS 13+ doesn't allow tint color to be changed in attributes inspector
         // Must set selected segment background color programatically
         if #available(iOS 13.0, *) {
@@ -136,7 +138,53 @@ class ViewController: UIViewController {
         resetButton.layer.masksToBounds = true
     }
     
-    
+    func setTheme(isDark: Bool) {
+        let theme = isDark ? ColorTheme.dark : ColorTheme.light
+
+        view.backgroundColor = theme.viewControllerBackgroundColor
+
+        headerView.backgroundColor = theme.primaryColor
+        titleLabel.textColor = theme.primaryTextColor
+
+        inputCardView.backgroundColor = theme.secondaryColor
+
+        billAmountTextField.tintColor = theme.accentColor
+        tipPercentSegmentedControl.tintColor = theme.accentColor
+
+        outputCardView.backgroundColor = theme.primaryColor
+        outputCardView.layer.borderColor = theme.accentColor.cgColor
+        
+        tipPercentSegmentedControl.layer.borderColor = theme.accentColor.cgColor
+        
+        if isDark {
+            if #available(iOS 13.0, *) {
+                tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcSeafoamGreen
+            } else {
+                // Fallback on earlier versions
+            }
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcBlueBlack], for: .selected)
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcSeafoamGreen], for: .normal)
+        } else {
+            if #available(iOS 13.0, *) {
+                tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcHotPink
+            } else {
+                // Fallback on earlier versions
+            }
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcDarkBlue], for: .selected)
+            tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcHotPink], for: .normal)
+        }
+
+        tipAmountTitleLabel.textColor = theme.primaryTextColor
+        totalAmountTitleLabel.textColor = theme.primaryTextColor
+
+        tipAmountLabel.textColor = theme.outputTextColor
+        totalAmountLabel.textColor = theme.outputTextColor
+
+        resetButton.backgroundColor = theme.secondaryColor
+        
+        isDefaultStatusBar = theme.isDefaultStatusBar
+        setNeedsStatusBarAppearanceUpdate()
+    }
     
 }
 

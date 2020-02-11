@@ -35,27 +35,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         billAmountTextField.calculateButtonAction = {
-            
-            if self.billAmountTextField.isFirstResponder {
-                self.billAmountTextField.resignFirstResponder()
-            }
-            
-            guard let billAmountText = self.billAmountTextField.text,
-                let billAmount = Double(billAmountText) else {
-                    return
-            }
-            
-            let roundedBillAmount = (100 * billAmount).rounded() / 100
-            
-            let tipPercent = 0.15
-            let tipAmount = roundedBillAmount * tipPercent
-            let roundedTipAmount = (100 * tipAmount).rounded() / 100
-            
-            let totalAmount = roundedBillAmount + roundedTipAmount
-            
-            self.billAmountTextField.text = String(format: "%.2f", roundedBillAmount)
-            self.tipAmountLabel.text = String(format: "%.2f", roundedTipAmount)
-            self.totalAmountLabel.text = String(format: "%.2f", totalAmount)
+            self.calculate()
         }
     }
     
@@ -75,6 +55,31 @@ class ViewController: UIViewController {
     
     @IBAction func resetButtonTapped(_ sender: Any) {
         print("reset button tapped")
+    }
+    
+    func calculate() {
+        // Dismiss Keyboard
+        if self.billAmountTextField.isFirstResponder {
+            self.billAmountTextField.resignFirstResponder()
+        }
+        
+        guard let billAmountText = self.billAmountTextField.text,
+            let billAmount = Double(billAmountText) else {
+                return
+        }
+        
+        let roundedBillAmount = (100 * billAmount).rounded() / 100
+        
+        let tipPercent = 0.15
+        let tipAmount = roundedBillAmount * tipPercent
+        let roundedTipAmount = (100 * tipAmount).rounded() / 100
+        
+        let totalAmount = roundedBillAmount + roundedTipAmount
+        
+        // Update UI
+        self.billAmountTextField.text = String(format: "%.2f", roundedBillAmount)
+        self.tipAmountLabel.text = String(format: "%.2f", roundedTipAmount)
+        self.totalAmountLabel.text = String(format: "%.2f", totalAmount)
     }
     
     

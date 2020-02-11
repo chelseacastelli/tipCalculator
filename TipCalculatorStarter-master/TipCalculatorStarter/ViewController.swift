@@ -34,6 +34,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setUpViews()
+        
         billAmountTextField.calculateButtonAction = {
             self.calculate()
         }
@@ -100,8 +102,38 @@ class ViewController: UIViewController {
         self.totalAmountLabel.text = "$0.00"
         
         tipPercentSegmentedControl.selectedSegmentIndex = 0
+    }
+    
+    func setUpViews() {
         
+        // iOS 13+ doesn't allow tint color to be changed in attributes inspector
+        // Must set selected segment background color programatically
+        if #available(iOS 13.0, *) {
+            tipPercentSegmentedControl.selectedSegmentTintColor = UIColor.tcHotPink
+        } else {
+            // Fallback on earlier versions
+        }
         
+        tipPercentSegmentedControl.layer.borderWidth = 1
+        tipPercentSegmentedControl.layer.borderColor = UIColor.tcHotPink.cgColor
+        tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcDarkBlue], for: .selected)
+        tipPercentSegmentedControl.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.tcHotPink], for: .normal)
+        
+        headerView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        headerView.layer.shadowOpacity = 0.05
+        headerView.layer.shadowColor = UIColor.black.cgColor
+        headerView.layer.shadowRadius = 35
+        
+        inputCardView.layer.cornerRadius = 8
+        inputCardView.layer.masksToBounds = true
+        
+        outputCardView.layer.cornerRadius = 8
+        outputCardView.layer.masksToBounds = true
+        outputCardView.layer.borderWidth = 1
+        outputCardView.layer.borderColor = UIColor.tcHotPink.cgColor
+        
+        resetButton.layer.cornerRadius = 8
+        resetButton.layer.masksToBounds = true
     }
     
     
